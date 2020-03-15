@@ -83,7 +83,7 @@ export default class Login extends Component {
                         <Text style={{textAlign:'center', color:'#56C8EA', fontSize:20}}>
                             Don't have an account yet?
                         </Text>
-                        <Text style={{textAlign:'center', color:'#0C2C43', fontSize:20, fontWeight:'bold'}}>
+                        <Text style={{textAlign:'center', color:'#0C2C43', fontSize:20, fontWeight:'bold'}} onPress={()=>this.props.navigation.navigate('signup')}>
                             Sign up now!
                         </Text>
                         <Button primary rounded style={{marginTop:30,display:'flex', justifyContent:'center', backgroundColor:'#0C2C43'}} onPress={()=>this.signIn()}>

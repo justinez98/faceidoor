@@ -25,7 +25,7 @@ export default class Contact extends Component {
                     <Text style={{textAlign:'center', fontWeight:'bold'}}>Justine Yong</Text>
                     <View>
                         <Button style={{ display: 'flex',justifyContent:'center',backgroundColor:'#0C2C43' }}>
-                        <Text style={{textAlign:'center'}}>Message</Text>
+                        <Text style={{textAlign:'center', color:'#fff'}}>Message</Text>
                        </Button>
                     </View>
                     
@@ -41,7 +41,7 @@ export default class Contact extends Component {
                     <Text style={{textAlign:'center', fontWeight:'bold'}}>Justine Yong</Text>
                     <View>
                         <Button style={{ display: 'flex',justifyContent:'center',backgroundColor:'#0C2C43' }}>
-                        <Text style={{textAlign:'center'}}>Message</Text>
+                        <Text style={{textAlign:'center', color:'#fff'}}>Message</Text>
                        </Button>
                     </View>
                     
@@ -62,7 +62,7 @@ export default class Contact extends Component {
             <View style={{height:'100%'}}>
                 <Header style={{backgroundColor:'#0C2C43'}}>
                     <Right>
-                        <Icon name="home" />
+                    <Icon type="MaterialIcons" name="notifications" style={{color:'#fff'}} />
                     </Right>
                 </Header>
                 <View style={{height:180, backgroundColor:'#0C2C43', borderBottomLeftRadius:210,paddingHorizontal:20}}>

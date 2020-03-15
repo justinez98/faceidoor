@@ -120,7 +120,7 @@ export default class History extends Component {
             <View style={{height:'100%'}}>
                 <Header style={{backgroundColor:'#0C2C43'}}>
                     <Right>
-                        <Icon name="home" />
+                        <Icon type="MaterialIcons" name="notifications" style={{color:'#fff'}} />
                     </Right>
                 </Header>
                 <View style={{height:180, backgroundColor:'#0C2C43', borderBottomLeftRadius:210,paddingHorizontal:20}}>

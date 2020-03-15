@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {  View,Image,Text, ScrollView } from 'react-native';
 import { Form,Item,Label,Input,Icon, CheckBox,Button, Card,CardItem,Body,Header,Left, Title, Right} from 'native-base';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 
 export default class Home extends Component {
@@ -20,7 +20,7 @@ export default class Home extends Component {
             <View style={{height:'100%'}}>
                 <Header style={{backgroundColor:'#0C2C43'}}>
                     <Right>
-                        <Icon name="home" />
+                        <Icon type="MaterialIcons" name="notifications" style={{color:'#fff'}} />
                     </Right>
                 </Header>
                 <View style={{height:180, backgroundColor:'#0C2C43', borderBottomRightRadius:210,paddingHorizontal:20}}>

@@ -22,7 +22,7 @@ export default class Profile extends Component {
             <View style={{height:'100%'}}>
                 <Header style={{backgroundColor:'#0C2C43'}}>
                     <Right>
-                        <Icon name="home" />
+                        <Icon type="MaterialIcons" name="notifications" style={{color:'#fff'}} />
                     </Right>
                 </Header>
                 <View style={{height:'60%', backgroundColor:'#0C2C43', borderBottomRightRadius:700,paddingHorizontal:20}}>
@@ -43,11 +43,10 @@ export default class Profile extends Component {
                          Allowed : 10 person
                     </Text>
                 </View>
-                <View style={{height:350,backgroundColor:'#0C2C43', borderTopLeftRadius:500,paddingHorizontal:20,}}>
-                       <Button style={{marginTop:150, width:200, marginLeft:150, display:'flex', justifyContent:'center',}}>
+                <Button style={{left:180,top:150, width:200, display:'flex', justifyContent:'center', backgroundColor:'#0C2C43',position:'relative'}} onPress={()=>this.props.navigation.navigate('login')}>
                            <Text style={{fontSize:20, color:'#fff'}}> Log Out</Text>
                        </Button>
-                </View>
+                
 
             </View>
           );
