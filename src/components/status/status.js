@@ -19,9 +19,7 @@ export default class Status extends Component {
         return (
             <View style={{height:'100%'}}>
                 <Header style={{backgroundColor:'#0C2C43'}}>
-                    <Right>
-                    <Icon type="MaterialIcons" name="notifications" style={{color:'#fff'}} />
-                    </Right>
+                    <Right/>
                 </Header>
                 <View style={{height:180, backgroundColor:'#0C2C43', borderBottomLeftRadius:210,paddingHorizontal:20}}>
                 <Text style={{fontSize:30, color:'#fff', fontFamily:'monospace'}}>
