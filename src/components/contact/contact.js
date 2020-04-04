@@ -2,64 +2,70 @@
 import React, { Component } from 'react';
 import {  View,Image,Text, ScrollView, Switch } from 'react-native';
 import { Icon,Button, Card,CardItem,Body,Header, Right, Item,Input,Thumbnail,List, ListItem,Left} from 'native-base';
-
+import axios from 'axios';
 
 
 export default class Contact extends Component {
      constructor(props) {
         super(props);
         this.state = {
-            lockStatus:false
+            contacts:[]
         }
 
       }
 
-      renderList(){
-            return(
-                <View>
-                         <ListItem thumbnail >
-                <Left>
-                    <Thumbnail   source={{ uri: 'https://www.w3schools.com/w3images/avatar2.png' }} />
-                </Left>
-                <Body>
-                    <Text style={{textAlign:'center', fontWeight:'bold'}}>Justine Yong</Text>
-                    <View>
-                        <Button style={{ display: 'flex',justifyContent:'center',backgroundColor:'#0C2C43' }}>
-                        <Text style={{textAlign:'center', color:'#fff'}}>Message</Text>
-                       </Button>
-                    </View>
-                    
-                </Body>
-                <Right>
-                </Right>
-            </ListItem>
-            <ListItem thumbnail >
-                <Left>
-                    <Thumbnail   source={{ uri: 'https://www.w3schools.com/w3images/avatar2.png' }} />
-                </Left>
-                <Body>
-                    <Text style={{textAlign:'center', fontWeight:'bold'}}>Justine Yong</Text>
-                    <View>
-                        <Button style={{ display: 'flex',justifyContent:'center',backgroundColor:'#0C2C43' }}>
-                        <Text style={{textAlign:'center', color:'#fff'}}>Message</Text>
-                       </Button>
-                    </View>
-                    
-                </Body>
-                <Right>
-                </Right>
-            </ListItem>
-                </View>
-               
-            
 
-            )
+      componentDidMount(){
+          this.getContact()
+          
       }
-      
+
+      async getContact(){
+          axios.post('http://35.247.190.138/faceidoor/allowed_list/getContacts.php', {
+              lock_id: 1,
+          })
+              .then(async (response) => {
+                  if (response.data.response === "201") {
+                      this.setState({ 
+                          contacts: response.data.contacts
+                        })
+                  } else {
+                  }
+
+              }, (error) => {
+                  console.log(error);
+              });
+      }
+
+
 
     render() {
+
+        const renderList = this.state.contacts.map((contact,i)=>{
+            return(
+                <ListItem thumbnail key={i} >
+                <Left>
+                    <Thumbnail   source={{ uri: 'https://www.w3schools.com/w3images/avatar2.png' }} />
+                </Left>
+                <Body>
+                    <Text style={{textAlign:'center', fontWeight:'bold'}}>{contact.name.toLocaleUpperCase()}</Text>
+                    <View>
+                        <Button style={{ display: 'flex',justifyContent:'center',backgroundColor:'#0C2C43' }}>
+                        <Text style={{textAlign:'center', color:'#fff'}}>Message</Text>
+                       </Button>
+                    </View>
+                    
+                </Body>
+                <Right>
+                </Right>
+            </ListItem>
+            );
+        })
+
+
+
         return (
-            <View style={{height:'100%'}}>
+            <View style={{height:'100%',backgroundColor:'#fff'}}>
                 <Header style={{backgroundColor:'#0C2C43'}}>
                     <Right />
                 </Header>
@@ -68,7 +74,7 @@ export default class Contact extends Component {
                         Contacts
                     </Text>
                     <Text style={{fontSize:20, color:'#fff', fontFamily:'monospace'}}>
-                       6 contact enable
+                       {this.state.contacts.length} contact enable
                     </Text>
                    <View style={{marginTop:20}}>
                         <Item rounded style={{backgroundColor:'#fff'}}>
@@ -82,7 +88,7 @@ export default class Contact extends Component {
                 <ScrollView style={{marginTop:10, backgroundColor:'#fff', height:'100%'}}>
                             <List style={{ marginTop: 10 }}>
                           {
-                              this.renderList()
+                            renderList
                           }
                         </List>
                         </ScrollView>

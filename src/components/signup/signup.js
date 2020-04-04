@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
 import {  View,Image,Text, ScrollView } from 'react-native';
-import { Form,Item,Label,Input,Icon, CheckBox,Button } from 'native-base';
+import { Form,Item,Label,Input,Icon, CheckBox,Button, Spinner } from 'native-base';
 import loginImage from '../../assets/image/bg.jpg'
 import logo from '../../assets/image/logo.jpg'
-
+import axios from 'axios';
 
 export default class SignUp extends Component {
      constructor(props) {
@@ -15,6 +15,7 @@ export default class SignUp extends Component {
             lockid:'',
             password:'',
             confirmPassword:'',
+            loading:false
         }
 
         this.signUp = this.signUp.bind(this)
@@ -54,15 +55,50 @@ export default class SignUp extends Component {
     }
 
     signUp( ){
-        console.log(this.state.email)
-        console.log(this.state.password)
-        // if(this.state.email==='abc@gmail.com' && this.state.password==='123'){
-            alert('Sign up complete')
-            this.props.navigation.navigate('login')
+        if(this.state.confirmPassword!==this.state.password){
+            alert('Confirm password does not match')
+            return
+        }else{
+            if(this.state.confirmPassword===""||this.state.password===""||this.state.email===""||this.state.lockid===""||this.state.username===""){
+                alert('Plase fill in all the field')
+                return
+            }
+            this.setState({
+                loading:true
+            })
+            axios.post('http://35.247.190.138/faceidoor/user/createUser.php', {
+                name: this.state.username,
+                lock_id: this.state.lockid,
+                email: this.state.email,
+                password: this.state.password
+              })
+              .then(async(response) => {
+                  console.log(response)
+                  if(response.data.response==="201"){
+                      this.setState({
+                          loading:false
+                      })
+                        alert('Account sucessfully created!')
+                    this.props.navigation.navigate('login')
+                  }else if(response.data.response==="400"){
+                      alert('Email address already taken')
+                      this.setState({
+                        loading:false
+                    })
+                  }
+                  else{
+                    alert('Network Error! Please try again')
+                    this.setState({
+                        loading:false
+                    })
+                  }
+               
+              }, (error) => {
+                console.log(error);
+              });
+        }
+
         
-    //     else{
-    //         alert('Incorrect email or password')
-    //     }
     }
 
     render() {
@@ -105,14 +141,20 @@ export default class SignUp extends Component {
                         Confirm password
                     </Label>
                         <Item rounded  >
-                            <Input secureTextEntry={true} value={this.state.password}  style={{marginLeft:10}}  onChangeText={(e)=>this.handleConfirmPassword(e)} />
+                            <Input secureTextEntry={true} value={this.state.confirmPassword}  style={{marginLeft:10}}  onChangeText={(e)=>this.handleConfirmPassword(e)} />
                         </Item>
                     </Form>
          
                     <View style={{display:'flex',marginTop:10,justifySelf:'center'}}>
+                    {this.state.loading?
+                        <Button  primary rounded style={{marginTop:30,display:'flex', justifyContent:'center', backgroundColor:'#0C2C43'}} disabled>
+                             <Spinner animation="border" variant="primary" />
+                      </Button>
+                      :
                         <Button primary rounded style={{marginTop:30,display:'flex', justifyContent:'center', backgroundColor:'#0C2C43'}} onPress={()=>this.signUp()}>
                            <Text style={{textAlign:'center', color:'#fff', fontSize:20,width:'100%'}} >Sign Up</Text>
                        </Button>
+                       }
                     </View>
                     
                 </View>

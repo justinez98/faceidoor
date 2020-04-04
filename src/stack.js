@@ -37,9 +37,9 @@ render(){
                 iconName = 'face'
             }
             if(focused){
-               colors="#fff"
+               colors="#0C2C43"
             }else{
-                colors="#000"
+                colors="#707070"
             }
   
               // You can return any component that you like here!
@@ -47,10 +47,10 @@ render(){
             },
           })}
             tabBarOptions={{
-                activeTintColor: '#fff',
-                inactiveTintColor: 'gray',
-                activeBackgroundColor: '#135B8E',
-                inactiveBackgroundColor:'#0C2C43'
+                activeTintColor: '#0C2C43',
+                inactiveTintColor: '#707070',
+                // activeBackgroundColor: '#135B8E',
+                // inactiveBackgroundColor:'#0C2C43'
             }}
             initialRouteName="home"
         >

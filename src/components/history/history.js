@@ -9,115 +9,38 @@ export default class History extends Component {
      constructor(props) {
         super(props);
         this.state = {
-            lockStatus:false
+            activities:[]
         }
 
       }
 
-      renderList(){
-            return(
-                <View>
-                    <ListItem thumbnail >
-                        <Left>
-                            <Text>5:66 p.m.</Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Unlock</Text>
-                            <View>
-
-                                <Text style={{ textAlign: 'center', fontSize: 30 }}> Justine Yong</Text>
-                            </View>
-
-                        </Body>
-                        <Right>
-                        </Right>
-                    </ListItem>
-                    <ListItem thumbnail >
-                        <Left>
-                            <Text>5:66 p.m.</Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Unlock</Text>
-                            <View>
-
-                                <Text style={{ textAlign: 'center', fontSize: 30 }}> Justine Yong</Text>
-                            </View>
-
-                        </Body>
-                        <Right>
-                        </Right>
-                    </ListItem>
-                    <ListItem thumbnail >
-                        <Left>
-                            <Text>5:66 p.m.</Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Unlock</Text>
-                            <View>
-
-                                <Text style={{ textAlign: 'center', fontSize: 30 }}> Justine Yong</Text>
-                            </View>
-
-                        </Body>
-                        <Right>
-                        </Right>
-                    </ListItem>
-                    <ListItem thumbnail >
-                        <Left>
-                            <Text>5:66 p.m.</Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Unlock</Text>
-                            <View>
-
-                                <Text style={{ textAlign: 'center', fontSize: 30 }}> Justine Yong</Text>
-                            </View>
-
-                        </Body>
-                        <Right>
-                        </Right>
-                    </ListItem>
-                    <ListItem thumbnail >
-                        <Left>
-                            <Text>5:66 p.m.</Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Unlock</Text>
-                            <View>
-
-                                <Text style={{ textAlign: 'center', fontSize: 30 }}> Justine Yong</Text>
-                            </View>
-
-                        </Body>
-                        <Right>
-                        </Right>
-                    </ListItem>
-                    <ListItem thumbnail >
-                        <Left>
-                            <Text>5:66 p.m.</Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Unlock</Text>
-                            <View>
-
-                                <Text style={{ textAlign: 'center', fontSize: 30 }}> Justine Yong</Text>
-                            </View>
-
-                        </Body>
-                        <Right>
-                        </Right>
-                    </ListItem>
-                </View>
-               
-            
-
-            )
-      }
       
 
     render() {
+
+        const renderList = this.state.activities.map((activity,i)=>{
+            return(
+                <ListItem thumbnail >
+                <Left>
+                    <Text>5:66 p.m.</Text>
+                </Left>
+                <Body>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Unlock</Text>
+                    <View>
+
+                        <Text style={{ textAlign: 'center', fontSize: 30 }}> Justine Yong</Text>
+                    </View>
+
+                </Body>
+                <Right>
+                </Right>
+            </ListItem>
+
+            )
+        })
+
         return (
-            <View style={{height:'100%'}}>
+            <View style={{height:'100%',backgroundColor:'#fff'}}>
                 <Header style={{backgroundColor:'#0C2C43'}}>
                     <Right />
                 </Header>
@@ -139,9 +62,12 @@ export default class History extends Component {
                 </View>
                 <ScrollView style={{marginTop:10, backgroundColor:'#fff', height:'100%'}}>
                             <List style={{ marginTop: 10 }}>
-                          {
-                              this.renderList()
-                          }
+                            {
+                                this.state.activities.length===0?
+                                <Text style={{justifyContent:'center',textAlign:'center',marginTop:50}}>No available History</Text>:
+                                renderList
+                            }
+                          
                         </List>
                         </ScrollView>
 
