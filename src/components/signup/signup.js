@@ -66,7 +66,7 @@ export default class SignUp extends Component {
             this.setState({
                 loading:true
             })
-            axios.post('http://35.247.190.138/faceidoor/user/createUser.php', {
+            axios.post('http://35.213.139.175/faceidoor/user/createUser.php', {
                 name: this.state.username,
                 lock_id: this.state.lockid,
                 email: this.state.email,

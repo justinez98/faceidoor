@@ -20,6 +20,8 @@ export default class Home extends Component {
             activity:[],
             contactsNum:'',
             loading:true,
+            intruder:[],
+            totalDetected:''
 
         }
 
@@ -39,6 +41,7 @@ export default class Home extends Component {
           await this.getLockStatus()
           await this.getLockActivity()
           await this.getAllowed()
+          await this.getIntruder()
           this.setState({
               loading: false
           })
@@ -46,7 +49,7 @@ export default class Home extends Component {
       }
     
      async getLockStatus(){
-        axios.post('http://35.247.190.138/faceidoor/lock_status/getLockStatus.php?lock_id=1')
+        axios.post('http://35.213.139.175/faceidoor/lock_status/getLockStatus.php?lock_id=1')
           .then(async(response) => {
               if(response.data.response==="201"){
                 this.setState({
@@ -65,12 +68,11 @@ export default class Home extends Component {
 
      async getLockActivity(){
 
-        axios.post('http://35.247.190.138/faceidoor/lock_activity/getLockActivity.php', {
+        axios.post('http://35.213.139.175/faceidoor/lock_activity/getLockActivity.php', {
             lock_id: this.state.lock_id,
           })
           .then(async(response) => {
               if(response.data.response==="201"){
-                  console.log(response)
                 this.setState({
                     activity:response.data.activity,
                 })
@@ -85,12 +87,11 @@ export default class Home extends Component {
 
      async getAllowed(){
          console.log('get allowed')
-        axios.post('http://35.247.190.138/faceidoor/allowed_list/getContacts.php', {
-            lock_id: 1,
+        axios.post('http://35.213.139.175/faceidoor/allowed_list/getContacts.php', {
+            lock_id: this.state.lock_id,
           })
           .then(async(response) => {
               if(response.data.response==="201"){
-                  console.log(response)
                 this.setState({
                     contactsNum:response.data.contacts
                 })
@@ -100,6 +101,37 @@ export default class Home extends Component {
           }, (error) => {
             console.log(error);
           });
+     }
+
+     async getIntruder(){
+         console.log('get intruder')
+        let fetchForm = new FormData();
+        fetchForm.append("lock_id", this.state.lock_id);
+        const url = "http://35.213.139.175/faceidoor/get_intruder/get_intruder.php";
+        const options = {
+          method: 'post',
+          headers:  { 'content-type': `multipart/form-data; boundary=${fetchForm._boundary}` } ,
+          data: fetchForm,
+          url: url
+        };
+
+        try {
+          const response = await axios(options);
+          if (response.data.response === '201') {
+              var tempArr = [];
+            response.data.intruder.forEach(intruder => {
+                if(intruder.notify==="0")
+                    tempArr.push(intruder)
+              });
+              this.setState({
+                intruder:tempArr,
+                totalDetected:response.data.intruder.length
+              })
+              setTimeout(() =>this.getIntruder(), 10000);
+          }
+        } catch (e) {
+          console.log(e);
+        }
      }
 
      backToHome(){
@@ -114,7 +146,7 @@ export default class Home extends Component {
             <View style={{height:'100%'}}>
               {
                   this.state.notificationPage?
-                        <NotificationPage  back={this.backToHome.bind(this)}/>
+                        <NotificationPage  back={this.backToHome.bind(this)} intruder={this.state.intruder}/>
                            
               :
               <View>
@@ -129,7 +161,23 @@ export default class Home extends Component {
                   <View>
                   <Header style={{backgroundColor:'#0C2C43'}}>
               <Right>
-                  <Icon type="MaterialIcons" name="notifications" style={{color:'#fff'}} onPress={()=> this.setState({notificationPage:true})}/>
+                    {
+                        this.state.intruder.length > 0 ?
+                            <View >
+                                <View style={{ justifyContent: 'center', position: 'absolute', left: 17, top:13 }}>
+                                    <Text style={{ textAlign: 'center', fontWeight: 'bold', color: '#fff', fontSize:10 }}>
+                                        {this.state.intruder.length}
+                                    </Text>
+                                </View>
+
+                                <Icon type="MaterialIcons" name="notifications-none" style={{ color: '#fff', fontSize:40 }} onPress={() => this.setState({ notificationPage: true })} />
+                            </View>
+                            :
+
+
+                            <Icon type="MaterialIcons" name="notifications" style={{ color: '#fff', fontSize:40 }} onPress={() => this.setState({ notificationPage: true })} />
+                    }
+
               </Right>
           </Header>
           <View style={{height:180, backgroundColor:'#0C2C43', borderBottomRightRadius:210,paddingHorizontal:20}}>
@@ -195,12 +243,12 @@ export default class Home extends Component {
                   </Card>
                   <Card style={{shadowOffset:2, height:250, width:'45%',}}>
                       <CardItem header style={{display:'flex', justifyContent:'center'}} >
-                          <Text style={{fontSize:25, fontWeight:'bold'}}>Unknown Detected</Text>
+                          <Text style={{fontSize:25, fontWeight:'bold'}}>Total Unknown</Text>
                       </CardItem>
                       <CardItem>
                           <Body >
                               <Text style={{fontSize:80, marginLeft:20}}>
-                                 2
+                                 {this.state.totalDetected}
                               </Text>
                           </Body>
                       </CardItem>

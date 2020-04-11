@@ -19,7 +19,7 @@ export default class Status extends Component {
       }
 
       async getLockStatus(){
-        axios.post('http://35.247.190.138/faceidoor/lock_status/getLockStatus.php?lock_id=1')
+        axios.post('http://35.213.139.175/faceidoor/lock_status/getLockStatus.php?lock_id=1')
           .then(async(response) => {
               if(response.data.response==="201"){
                 if(response.data.status.status==='unlock'){
@@ -50,7 +50,7 @@ export default class Status extends Component {
         }else{
             temp ='lock'
         }
-        axios.post('http://35.247.190.138/faceidoor/lock_status/changeLockStatus.php', {
+        axios.post('http://35.213.139.175/faceidoor/lock_status/changeLockStatus.php', {
             lock_id: 1,
             battery: 100,
             status: temp,

@@ -52,7 +52,7 @@ export default class Login extends Component {
         this.setState({
             loading:true
         })
-        axios.post('http://35.247.190.138/faceidoor/user/login.php', {
+        axios.post('http://35.213.139.175/faceidoor/user/login.php', {
             email: this.state.email,
             password: this.state.password 
           })

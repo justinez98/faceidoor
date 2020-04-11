@@ -21,7 +21,7 @@ export default class Contact extends Component {
       }
 
       async getContact(){
-          axios.post('http://35.247.190.138/faceidoor/allowed_list/getContacts.php', {
+          axios.post('http://35.213.139.175/faceidoor/allowed_list/getContacts.php', {
               lock_id: 1,
           })
               .then(async (response) => {
