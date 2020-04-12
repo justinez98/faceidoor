@@ -76,7 +76,7 @@ export default class Home extends Component {
                 this.setState({
                     activity:response.data.activity,
                 })
-                
+                console.log(response.data.activity)
               }else{
               }
            
@@ -104,7 +104,7 @@ export default class Home extends Component {
      }
 
      async getIntruder(){
-         console.log('get intruder')
+        //  console.log('get intruder')
         let fetchForm = new FormData();
         fetchForm.append("lock_id", this.state.lock_id);
         const url = "http://35.213.139.175/faceidoor/get_intruder/get_intruder.php";
@@ -227,15 +227,15 @@ export default class Home extends Component {
                       </CardItem>
                       <CardItem>
                           <Body >
-                              <View style={{width:'100%',borderBottomWidth: 1,borderBottomColor:'#a9a9a9'}}>
+                              <View style={{width:'100%'}}>
                               <Text style={{fontSize:15, marginLeft:10,color:'#a9a9a9'}}>
-                                {this.state.activity.datetime}
+                              {this.state.activity.length>0?this.state.activity[this.state.activity.length-1].datetime:'No activity'}
                               </Text>
                               <Text style={{fontSize:30, marginLeft:10,fontWeight:'bold'}}>
-                                 {this.state.activity.action}
+                                 {this.state.activity[this.state.activity.length-1].action.toLocaleUpperCase()}
                               </Text>
                               <Text style={{fontSize:20, marginLeft:10}}>
-                                 by user id { this.state.activity.user_id}
+                                  by {this.state.activity[this.state.activity.length-1].user_id}
                               </Text>
                               </View>                      
                           </Body>

@@ -3,13 +3,18 @@ import React, { Component } from 'react';
 import {  View,Image,Text, ScrollView, Switch } from 'react-native';
 import { Icon,Button, Card,CardItem,Body,Header, Right, Item,Input,Thumbnail,List, ListItem,Left} from 'native-base';
 import axios from 'axios';
-
+import {AudioRecorder, AudioUtils} from 'react-native-audio';
+import Audio from './audio'
 
 export default class Contact extends Component {
      constructor(props) {
         super(props);
         this.state = {
-            contacts:[]
+            contacts:[],
+            showAudiopage:false,
+            receiver_id:'',
+            receiver:''
+            
         }
 
       }
@@ -37,9 +42,17 @@ export default class Contact extends Component {
               });
       }
 
+        backToContact(){
+            this.setState({
+                showAudiopage:false
+            })
+        }
+
+
 
 
     render() {
+        
 
         const renderList = this.state.contacts.map((contact,i)=>{
             return(
@@ -50,7 +63,7 @@ export default class Contact extends Component {
                 <Body>
                     <Text style={{textAlign:'center', fontWeight:'bold'}}>{contact.name.toLocaleUpperCase()}</Text>
                     <View>
-                        <Button style={{ display: 'flex',justifyContent:'center',backgroundColor:'#0C2C43' }}>
+                        <Button style={{ display: 'flex',justifyContent:'center',backgroundColor:'#0C2C43' }} onPress={()=>this.setState({showAudiopage:true,receiver:contact.name,receiver_id:contact.id})}>
                         <Text style={{textAlign:'center', color:'#fff'}}>Message</Text>
                        </Button>
                     </View>
@@ -66,7 +79,12 @@ export default class Contact extends Component {
 
         return (
             <View style={{height:'100%',backgroundColor:'#fff'}}>
-                <Header style={{backgroundColor:'#0C2C43'}}>
+                {
+                    this.state.showAudiopage?
+                    <Audio back={this.backToContact.bind(this)} receiver={this.state.receiver}/>
+                    :
+                    <View>
+                        <Header style={{backgroundColor:'#0C2C43'}}>
                     <Right />
                 </Header>
                 <View style={{height:180, backgroundColor:'#0C2C43', borderBottomLeftRadius:210,paddingHorizontal:20}}>
@@ -92,6 +110,9 @@ export default class Contact extends Component {
                           }
                         </List>
                         </ScrollView>
+                    </View>
+                }
+                
 
             </View>
           );
