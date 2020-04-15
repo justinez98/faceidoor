@@ -6,6 +6,7 @@ import { Form,Item,Label,Input,Icon, CheckBox,Button, Card,CardItem,Body,Header,
 import loadingGif from '../../assets/image/loading.gif'
 import axios from 'axios';
 import NotificationPage from '../notification/notification'
+import Sound from "react-native-sound";
 
 export default class Home extends Component {
      constructor(props) {
@@ -42,9 +43,10 @@ export default class Home extends Component {
           await this.getLockActivity()
           await this.getAllowed()
           await this.getIntruder()
+          await this.getMemo()
           this.setState({
-              loading: false
-          })
+            loading: false
+        })
         
       }
     
@@ -78,6 +80,7 @@ export default class Home extends Component {
                 })
                 console.log(response.data.activity)
               }else{
+                  console.log('gg')
               }
            
           }, (error) => {
@@ -131,6 +134,91 @@ export default class Home extends Component {
           }
         } catch (e) {
           console.log(e);
+        }
+        
+     }
+
+     async getMemo(){
+        // this.state.account_id
+        let fetchForm = new FormData();
+        fetchForm.append("user_id", 1 );
+        const url = "http://35.213.139.175/faceidoor/voice_memo/get_memo.php";
+        const options = {
+            method: 'post',
+            headers: { 'content-type': `multipart/form-data; boundary=${fetchForm._boundary}` },
+            data: fetchForm,
+            url: url
+        };
+
+        try {
+            const response = await axios(options);
+            console.log(response.data.response)
+            if (response.data.response === "201") {
+               
+                if(response.data.memo[response.data.memo.length-1].played === '0' && response.data.memo[response.data.memo.length-1].recognized === '1'){
+                    console.log('got message')
+                    this.playMemo(response.data.memo[response.data.memo.length-1].voice_memo,response.data.memo[response.data.memo.length-1].id)
+                }
+                else{
+                    console.log('played')
+                    setTimeout(() =>this.getMemo(), 10000);
+                }
+            }else{
+                console.log('no messaage')
+                setTimeout(() =>this.getMemo(), 10000);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+     }
+
+       playMemo(endPath,id){
+         console.log(endPath)
+        var temp = "http://35.213.139.175/faceidoor/voice_memo/voice_memo/" + endPath;
+        var whoosh = new Sound(temp, Sound.MAIN_BUNDLE, (error) => {
+            if (error) {
+                console.log('failed to load the sound', error);
+                return;
+            }
+            // loaded successfully
+            console.log('duration in seconds: ' + whoosh.getDuration() + 'number of channels: ' + whoosh.getNumberOfChannels());
+            // Play the sound with an onEnd callback
+            whoosh.play(async(success) => {
+                if (success) {
+                    console.log('successfully finished playing');
+                    await this.updateMemo(id)
+                } else {
+                    console.log('playback failed due to audio decoding errors');
+                }
+            });
+        });
+     }
+
+     async updateMemo(id){
+        console.log('update memo')
+        console.log(id)
+        let fetchForm = new FormData();
+        fetchForm.append("memo_id", id );
+        fetchForm.append("played", '1' );
+        fetchForm.append("recognized", '1' );
+        const url = "http://35.213.139.175/faceidoor/voice_memo/edit_memo.php";
+        const options = {
+            method: 'post',
+            headers: { 'content-type': `multipart/form-data; boundary=${fetchForm._boundary}` },
+            data: fetchForm,
+            url: url
+        };
+
+        try {
+            const response = await axios(options);
+            if (response.data[0].response === "201") {
+                    console.log('done update')
+                     this.getMemo()
+            }else{
+                console.log('time out')
+            }
+        } catch (e) {
+            console.log(e);
         }
      }
 
@@ -228,15 +316,22 @@ export default class Home extends Component {
                       <CardItem>
                           <Body >
                               <View style={{width:'100%'}}>
-                              <Text style={{fontSize:15, marginLeft:10,color:'#a9a9a9'}}>
-                              {this.state.activity.length>0?this.state.activity[this.state.activity.length-1].datetime:'No activity'}
-                              </Text>
-                              <Text style={{fontSize:30, marginLeft:10,fontWeight:'bold'}}>
-                                 {this.state.activity[this.state.activity.length-1].action.toLocaleUpperCase()}
-                              </Text>
-                              <Text style={{fontSize:20, marginLeft:10}}>
-                                  by {this.state.activity[this.state.activity.length-1].user_id}
-                              </Text>
+                                  {this.state.activity.length>0 &&
+                                   <Text style={{fontSize:15, marginLeft:10,color:'#a9a9a9'}}>
+                                   {this.state.activity.length>0?this.state.activity[this.state.activity.length-1].datetime:'No activity'}
+                                   </Text>
+                                  }
+                             {this.state.activity.length>0 &&
+                                   <Text style={{fontSize:30, marginLeft:10,fontWeight:'bold'}}>
+                                   {this.state.activity[this.state.activity.length-1].action.toLocaleUpperCase()}
+                                </Text>
+                                  }
+                              {this.state.activity.length>0 &&
+                                   <Text style={{fontSize:20, marginLeft:10}}>
+                                   by {this.state.activity[this.state.activity.length-1].user_id}
+                               </Text>
+                                  }
+                              
                               </View>                      
                           </Body>
                       </CardItem>
@@ -248,7 +343,7 @@ export default class Home extends Component {
                       <CardItem>
                           <Body >
                               <Text style={{fontSize:80, marginLeft:20}}>
-                                 {this.state.totalDetected}
+                                 {this.state.intruder.length}
                               </Text>
                           </Body>
                       </CardItem>

@@ -81,7 +81,7 @@ export default class Contact extends Component {
             <View style={{height:'100%',backgroundColor:'#fff'}}>
                 {
                     this.state.showAudiopage?
-                    <Audio back={this.backToContact.bind(this)} receiver={this.state.receiver}/>
+                    <Audio back={this.backToContact.bind(this)} receiver={this.state.receiver} receiver_id={this.state.receiver_id}/>
                     :
                     <View>
                         <Header style={{backgroundColor:'#0C2C43'}}>
